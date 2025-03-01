@@ -1,310 +1,521 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Second Home - Login</title>
-    <style>
-        /* Use the same color scheme as your main app */
-        :root {
-            --primary-color: #FF6B6B;
-            --secondary-color: #4ECDC4;
-            --accent-color: #FFD166;
-            --background-color: #F7FFF7;
-            --text-color: #2D3748;
-            --purple-color: #9C6ADE;
-            --blue-color: #5B8AF9;
-            --green-color: #7ED957;
-            --pink-color: #FF71CE;
-        }
-        
-        body {
-            background-color: var(--background-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        
-        .login-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        
-        .logo {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        button:hover {
-            background-color: #ff5252;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        
-        .register-link {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        
-        .register-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-        
-        .app-description {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 14px;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="logo">My Second Home</div>
-        <div id="login-form">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password">
-            </div>
-            <button id="login-button">Login</button>
-            <div id="error-message" class="error"></div>
-            <div class="register-link">
-                <a href="#" id="register-toggle">Don't have an account? Register</a>
-            </div>
-        </div>
-        
-        <div id="register-form" style="display: none;">
-            <div class="form-group">
-                <label for="reg-name">Full Name</label>
-                <input type="text" id="reg-name" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-                <label for="reg-email">Email</label>
-                <input type="email" id="reg-email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label for="reg-password">Password</label>
-                <input type="password" id="reg-password" placeholder="Create a password">
-            </div>
-            <button id="register-button">Register</button>
-            <div id="reg-error-message" class="error"></div>
-            <div class="register-link">
-                <a href="#" id="login-toggle">Already have an account? Login</a>
-            </div>
-        </div>
-        
-        <div class="app-description">
-            Daycare Management System for staff members
-        </div>
-    </div>
+// Your web app's Firebase configuration
+// REPLACE WITH YOUR FIREBASE CONFIG FROM CONSOLE
+const firebaseConfig = {
+    apiKey: "AIzaSyB5aoLFrL9GgG1KDTz47JWl8H_TGvTOj00",
+    authDomain: "my-second-home-daycare.firebaseapp.com",
+    projectId: "my-second-home-daycare",
+    storageBucket: "my-second-home-daycare.appspot.com",
+    messagingSenderId: "1066792337580",
+    appId: "1:1066792337580:web:8b3d733c5fbf0d5c09f022"
+};
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
-    <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCsGBl8yIxKquh-QCN1F5NUa7hF4TLyhA8",
-            authDomain: "my-second-home-cfd9e.firebaseapp.com",
-            projectId: "my-second-home-cfd9e",
-            storageBucket: "my-second-home-cfd9e.firebasestorage.app",
-            messagingSenderId: "483174288185",
-            appId: "1:483174288185:web:e80973c72f97e7319a36e8",
-            measurementId: "G-8V7JRGXC45"
-        };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        
-        // Initialize services
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        
-        // References
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const loginButton = document.getElementById('login-button');
-        const registerButton = document.getElementById('register-button');
-        const registerToggle = document.getElementById('register-toggle');
-        const loginToggle = document.getElementById('login-toggle');
-        const errorMessage = document.getElementById('error-message');
-        const regErrorMessage = document.getElementById('reg-error-message');
-        
-        // Toggle between login and register forms
-        registerToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-        });
-        
-        loginToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            registerForm.style.display = 'none';
-            loginForm.style.display = 'block';
-        });
-        
-        // Login functionality
-        loginButton.addEventListener('click', () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                errorMessage.textContent = "Please enter both email and password";
-                return;
-            }
-            
-            loginButton.disabled = true;
-            loginButton.textContent = "Logging in...";
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    // Redirect to main app page
-                    window.location.href = 'index.html';
+// Initialize services
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Check authentication status and redirect if not logged in
+auth.onAuthStateChanged(user => {
+    if (!user && !window.location.href.includes('login.html')) {
+        // Redirect to login page if not logged in and not already on login page
+        window.location.href = 'login.html';
+    } else if (user) {
+        // Show user info if logged in
+        const userDisplayElement = document.getElementById('user-display');
+        if (userDisplayElement) {
+            // Get user data from Firestore
+            db.collection('users').doc(user.uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        userDisplayElement.textContent = userData.name || user.email;
+                    } else {
+                        userDisplayElement.textContent = user.email;
+                    }
                 })
                 .catch(error => {
-                    errorMessage.textContent = error.message;
-                    loginButton.disabled = false;
-                    loginButton.textContent = "Login";
+                    console.error("Error getting user data:", error);
+                    userDisplayElement.textContent = user.email;
+                });
+        }
+        
+        // Make main content visible if logged in
+        const container = document.querySelector('.container');
+        if (container) {
+            container.style.display = 'flex';
+        }
+        
+        // Load data for the application
+        loadApplicationData();
+    }
+});
+
+// Load application data from Firestore
+function loadApplicationData() {
+    // Load children data
+    loadChildren();
+    
+    // Load Quran students
+    loadQuranStudents();
+}
+
+// Load registered children
+function loadChildren() {
+    const tableBody = document.querySelector('#registration table tbody');
+    if (!tableBody) return;
+    
+    // Clear existing rows
+    tableBody.innerHTML = '';
+    
+    // Get children from Firestore
+    db.collection('children').orderBy('registrationDate', 'desc').get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+                console.log('No children registered yet');
+                return;
+            }
+            
+            let childCount = 0;
+            
+            snapshot.forEach(doc => {
+                const child = doc.data();
+                childCount++;
+                
+                // Calculate age
+                let age = '';
+                if (child.dob) {
+                    age = calculateAge(child.dob) + ' years';
+                }
+                
+                // Create table row
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${child.name || ''}</td>
+                    <td>${age}</td>
+                    <td>${child.parentName || ''}</td>
+                    <td>${child.phone || ''}</td>
+                    <td>${formatDate(child.registrationDate)}</td>
+                    <td>
+                        <button class="action-btn view-btn" data-id="${doc.id}"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit-btn" data-id="${doc.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn" data-id="${doc.id}" data-collection="children"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Update dashboard count
+            const totalChildrenElement = document.querySelector('.dashboard-cards .card:first-child .card-value');
+            if (totalChildrenElement) {
+                totalChildrenElement.textContent = childCount;
+            }
+            
+            // Update dashboard recent registrations
+            updateRecentRegistrations(snapshot);
+        })
+        .catch(error => {
+            console.error("Error loading children:", error);
+        });
+}
+
+// Update recent registrations on dashboard
+function updateRecentRegistrations(snapshot) {
+    const recentRegistrationsTable = document.querySelector('#recent-registrations tbody');
+    if (!recentRegistrationsTable) return;
+    
+    // Clear existing rows
+    recentRegistrationsTable.innerHTML = '';
+    
+    // Get the 3 most recent registrations
+    const recentChildren = snapshot.docs.slice(0, 3);
+    
+    recentChildren.forEach(doc => {
+        const child = doc.data();
+        
+        // Calculate age
+        let age = '';
+        if (child.dob) {
+            age = calculateAge(child.dob) + ' years';
+        }
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${child.name || ''}</td>
+            <td>${age}</td>
+            <td>${formatDate(child.registrationDate)}</td>
+            <td>
+                <button class="action-btn view-btn" data-id="${doc.id}"><i class="fas fa-eye"></i></button>
+                <button class="action-btn edit-btn" data-id="${doc.id}"><i class="fas fa-edit"></i></button>
+            </td>
+        `;
+        
+        recentRegistrationsTable.appendChild(row);
+    });
+}
+
+// Load Quran students
+function loadQuranStudents() {
+    // All students table
+    const allStudentsTable = document.querySelector('#all-students tbody');
+    if (!allStudentsTable) return;
+    
+    // Clear existing rows
+    allStudentsTable.innerHTML = '';
+    
+    // Level tables
+    const beginnerTable = document.querySelector('#beginner-level tbody');
+    const intermediateTable = document.querySelector('#intermediate-level tbody');
+    const advancedTable = document.querySelector('#advanced-level tbody');
+    
+    if (beginnerTable) beginnerTable.innerHTML = '';
+    if (intermediateTable) intermediateTable.innerHTML = '';
+    if (advancedTable) advancedTable.innerHTML = '';
+    
+    // Get quran students from Firestore
+    db.collection('quranStudents').orderBy('registrationDate', 'desc').get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+                console.log('No Quran students registered yet');
+                return;
+            }
+            
+            let studentCount = 0;
+            let totalRevenue = 0;
+            
+            snapshot.forEach(doc => {
+                const student = doc.data();
+                studentCount++;
+                
+                // Add to total revenue
+                if (student.monthlyFee) {
+                    totalRevenue += parseFloat(student.monthlyFee);
+                }
+                
+                // Create table row
+                const row = createQuranStudentRow(student, doc.id);
+                
+                // Add to all students table
+                if (allStudentsTable) {
+                    allStudentsTable.appendChild(row.cloneNode(true));
+                }
+                
+                // Add to level-specific table
+                if (student.level === 'beginner' && beginnerTable) {
+                    beginnerTable.appendChild(row.cloneNode(true));
+                } else if (student.level === 'intermediate' && intermediateTable) {
+                    intermediateTable.appendChild(row.cloneNode(true));
+                } else if (student.level === 'advanced' && advancedTable) {
+                    advancedTable.appendChild(row.cloneNode(true));
+                }
+            });
+            
+            // Update student count and revenue
+            const totalStudentsElement = document.querySelector('.summary-cards .card:first-child .card-value');
+            const monthlyRevenueElement = document.querySelector('.summary-cards .card:last-child .card-value');
+            
+            if (totalStudentsElement) {
+                totalStudentsElement.textContent = studentCount;
+            }
+            
+            if (monthlyRevenueElement) {
+                monthlyRevenueElement.textContent = '$' + totalRevenue;
+            }
+        })
+        .catch(error => {
+            console.error("Error loading Quran students:", error);
+        });
+}
+
+// Create a row for a Quran student
+function createQuranStudentRow(student, docId) {
+    const row = document.createElement('tr');
+    
+    // Get progress data
+    let progress = student.progress || 0;
+    let progressColor = 'var(--primary-color)';
+    
+    if (student.level === 'intermediate') {
+        progressColor = 'var(--blue-color)';
+    } else if (student.level === 'advanced') {
+        progressColor = 'var(--green-color)';
+    }
+    
+    row.innerHTML = `
+        <td>${student.name || ''}</td>
+        <td>${student.age ? student.age + ' years' : ''}</td>
+        <td>${student.currentSurah || ''}</td>
+        <td>
+            <div class="progress-bar">
+                <div class="progress" style="width: ${progress}%; background-color: ${progressColor};"></div>
+            </div>
+            <span>${progress}%</span>
+        </td>
+        <td>${student.teacher || ''}</td>
+        <td>$${student.monthlyFee || '0'}</td>
+        <td>
+            <button class="action-btn view-btn" data-id="${docId}"><i class="fas fa-eye"></i></button>
+            <button class="action-btn edit-btn" data-id="${docId}"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn" data-id="${docId}" data-collection="quranStudents"><i class="fas fa-trash"></i></button>
+        </td>
+    `;
+    
+    return row;
+}
+
+// Handle form submissions
+document.addEventListener('DOMContentLoaded', function() {
+    // Child registration form
+    const registrationForm = document.getElementById('registration-form');
+    if (registrationForm) {
+        registrationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const childData = {
+                name: document.getElementById('child-name').value,
+                dob: document.getElementById('child-dob').value,
+                parentName: document.getElementById('parent-name').value,
+                phone: document.getElementById('parent-phone').value,
+                email: document.getElementById('parent-email').value || '',
+                registrationDate: new Date(),
+                emergencyContact: document.getElementById('emergency-contact').value || '',
+                relationship: document.getElementById('relationship').value || '',
+                medicalInfo: document.getElementById('medical-info').value || '',
+                notes: document.getElementById('additional-notes').value || ''
+            };
+            
+            // Save to Firestore
+            db.collection('children').add(childData)
+                .then(() => {
+                    showNotification('Child registered successfully!');
+                    registrationForm.reset();
+                    
+                    // Reload children data
+                    loadChildren();
+                })
+                .catch(error => {
+                    console.error("Error adding child:", error);
+                    showNotification('Error registering child. Please try again.');
                 });
         });
-        
-        // Registration functionality
-        registerButton.addEventListener('click', () => {
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
+    }
+    
+    // Quran registration form
+    const quranRegistrationForm = document.getElementById('quran-registration-form');
+    if (quranRegistrationForm) {
+        quranRegistrationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            if (!name || !email || !password) {
-                regErrorMessage.textContent = "Please fill in all fields";
-                return;
+            // Calculate progress based on level
+            const quranLevel = document.getElementById('quran-level').value;
+            let progress;
+            
+            if (quranLevel === 'beginner') {
+                progress = Math.floor(Math.random() * 20) + 10; // 10-30%
+            } else if (quranLevel === 'intermediate') {
+                progress = Math.floor(Math.random() * 20) + 30; // 30-50%
+            } else {
+                progress = Math.floor(Math.random() * 30) + 50; // 50-80%
             }
             
-            if (password.length < 6) {
-                regErrorMessage.textContent = "Password must be at least 6 characters";
-                return;
-            }
+            // Get form data
+            const studentData = {
+                name: document.getElementById('student-full-name').value,
+                age: document.getElementById('student-age').value,
+                parentName: document.getElementById('parent-guardian-name').value || '',
+                phone: document.getElementById('contact-number').value || '',
+                email: document.getElementById('email-address').value || '',
+                registrationDate: new Date(),
+                level: quranLevel,
+                currentSurah: document.getElementById('current-surah').value,
+                teacher: document.getElementById('quran-teacher').value === 'mohammed' ? 'Mohammed (Quran Teacher)' : '',
+                classDays: getSelectedOptions('class-days'),
+                classTime: document.getElementById('class-time').value || '',
+                monthlyFee: document.getElementById('monthly-fee').value,
+                paymentMethod: document.getElementById('payment-method').value || '',
+                paymentStatus: document.getElementById('payment-status').value || '',
+                notes: document.getElementById('special-requirements').value || '',
+                progress: progress
+            };
             
-            registerButton.disabled = true;
-            registerButton.textContent = "Registering...";
+            // Save to Firestore
+            db.collection('quranStudents').add(studentData)
+                .then(() => {
+                    showNotification('Quran student registered successfully!');
+                    quranRegistrationForm.reset();
+                    
+                    // Reload Quran students data
+                    loadQuranStudents();
+                })
+                .catch(error => {
+                    console.error("Error adding Quran student:", error);
+                    showNotification('Error registering Quran student. Please try again.');
+                });
+        });
+    }
+    
+    // Delete functionality
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.delete-btn')) {
+            const deleteBtn = e.target.closest('.delete-btn');
+            const docId = deleteBtn.getAttribute('data-id');
+            const collection = deleteBtn.getAttribute('data-collection') || 'children';
             
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(cred => {
-                    // Store additional user info in Firestore
-                    return db.collection('users').doc(cred.user.uid).set({
-                        name: name,
-                        email: email,
-                        role: 'staff',  // Default role
-                        createdAt: new Date()
+            if (confirm('Are you sure you want to delete this record?')) {
+                // Delete from Firestore
+                db.collection(collection).doc(docId).delete()
+                    .then(() => {
+                        showNotification('Record deleted successfully!');
+                        
+                        // Reload data
+                        if (collection === 'children') {
+                            loadChildren();
+                        } else if (collection === 'quranStudents') {
+                            loadQuranStudents();
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error deleting document:", error);
+                        showNotification('Error deleting record. Please try again.');
                     });
-                })
-                .then(() => {
-                    // Redirect to main app
-                    window.location.href = 'index.html';
-                })
-                .catch(error => {
-                    regErrorMessage.textContent = error.message;
-                    registerButton.disabled = false;
-                    registerButton.textContent = "Register";
-                });
-        });
-        
-        // Check if user is already logged in
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                window.location.href = 'index.html';
             }
+        }
+    });
+    
+    // Tab functionality
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            const tabContainer = this.closest('.tab-container');
+            
+            // Update active tab
+            tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show active tab pane
+            tabContainer.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
         });
-        
-        // Handle enter key press
-        document.getElementById('email').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('password').focus();
-            }
+    });
+    
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item:not(#logout-btn)');
+    const sections = document.querySelectorAll('section');
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const sectionId = this.getAttribute('data-section');
+            if (!sectionId) return;
+            
+            // Update active navigation
+            navItems.forEach(navItem => navItem.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show active section
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
         });
-        
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loginButton.click();
-            }
-        });
-        
-        document.getElementById('reg-name').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('reg-email').focus();
-            }
-        });
-        
-        document.getElementById('reg-email').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('reg-password').focus();
-            }
-        });
-        
-        document.getElementById('reg-password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                registerButton.click();
-            }
-        });
-    </script>
-</body>
-</html>
+    });
+});
+
+// Logout functionality
+const logoutButton = document.getElementById('logout-btn');
+if (logoutButton) {
+    logoutButton.addEventListener('click', () => {
+        auth.signOut()
+            .then(() => {
+                window.location.href = 'login.html';
+            })
+            .catch(error => {
+                console.error("Error signing out:", error);
+                showNotification('Error signing out. Please try again.');
+            });
+    });
+}
+
+// Helper function to get selected options from a multi-select
+function getSelectedOptions(selectId) {
+    const select = document.getElementById(selectId);
+    if (!select) return [];
+    
+    const result = [];
+    const options = select && select.options;
+    
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].selected) {
+            result.push(options[i].value);
+        }
+    }
+    
+    return result;
+}
+
+// Format date for display
+function formatDate(timestamp) {
+    if (!timestamp) return '';
+    
+    let date;
+    if (timestamp instanceof Date) {
+        date = timestamp;
+    } else if (timestamp.seconds) {
+        // Firestore timestamp
+        date = new Date(timestamp.seconds * 1000);
+    } else {
+        // Try to parse as string
+        date = new Date(timestamp);
+    }
+    
+    if (isNaN(date.getTime())) {
+        return '';
+    }
+    
+    return date.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    });
+}
+
+// Calculate age from date of birth
+function calculateAge(dob) {
+    if (!dob) return '';
+    
+    const birthDate = new Date(dob);
+    const today = new Date();
+    
+    if (isNaN(birthDate.getTime())) {
+        return '';
+    }
+    
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    
+    return age;
+}
+
+// Global notification function
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
